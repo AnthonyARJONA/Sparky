@@ -1,0 +1,2 @@
+# Sparky
+A javascript bot
