@@ -1,7 +1,9 @@
+const message = require('../services/message')
+
 module.exports = {
     name: 'server',
     description: 'Server informations.',
-    execute(message) {
-      message.channel.send(`Nom du serveur : ${message.guild.name}\nNombre d'utilisateurs : ${message.guild.memberCount}`);
+    execute(_message) {
+      return message.send(_message, `Nom du serveur : ${message.guild.name}\nNombre d'utilisateurs : ${message.guild.memberCount}`);
     }
 };

@@ -4,6 +4,6 @@ module.exports = {
     name: 'ping',
     description: 'Run a ping command.',
     execute(_message) {
-      message.send(_message, 'Pong!')
+      return message.send(_message, 'Pong!')
     }
 };
