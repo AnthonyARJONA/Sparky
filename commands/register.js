@@ -1,46 +1,64 @@
 const { access, constants, writeFile } = require('fs');
+const Buffer = require('buffer').Buffer 
+const Logger = require('../services/logger');
 
 module.exports = {
     name: "register",
     description: "Register new user for the bot",
-    execute(message) {
-        let filepath = 'data/' + message.author.id + '.json';
+    execute(message, args) {
 
-        access(filepath,  constants.F_OK, (e) => {
+        let filepath = 'data/' + message.author.id + '.json';
+        let date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+
+        if(!Array.isArray(args)) {
+            message.author.send('Please enter arguments after register command');
+            Logger.log(`user ` + message.author.tag + ` forget args`);
+            return;
+        }
+
+        if(typeof args[0] != 'string' || typeof args[1] != 'string') {
+            message.author.send('Please enter string arguments after register command');
+            Logger.log(`user ` + message.author.tag + ` enter invalid args types`);
+            return;
+        }
+
+        //check myges login
+        
+        access(filepath, constants.F_OK, (e) => {
             if(e) {
                 let data = {
                     "id": message.author.id,
                     "username": message.author.username,
-                    "myges_username": "",
-                    "myges_password": "",
-                    "myges_token": "",
+                    "myges_username": args[0],
+                    "myges_password": args[1],
+                    "myges_token": Buffer.from(args[0] + ':' + args[1]).toString('base64'),
                     "tag": message.author.tag,
-                    "register_at": Date.now(),
-                    "update_at": Date.now(),
+                    "register_at": date,
+                    "update_at": date,
                 }
 
                 writeFile(filepath, JSON.stringify(data), (e) => {
                     if(e) {
                         message.reply('Une erreur est survenue contacter l\'administrateur.')
                             .then(() =>
-                                console.log(`[log] ` + Date.now() + ` : ${message.author.username} is now registered`))
-                                message.delete()
+                                Logger.err(),
+                                message.delete())
                             .catch(console.error);
                     } else {
-                        console.log(`[log] ` + Date.now() + ` : ${message.author.username} file created...`)
+                        Logger.log(`${message.author.tag} file created...`, `info`)
                         message.author.send('Inscription effectué!')
                             .then(() =>
-                                console.log(`[log] ` + Date.now() + ` : ${message.author.username} is now registered`))
-                                message.delete()
+                                Logger.log(`${message.author.tag} is now registered...`, `info`),
+                                message.delete())
                             .catch(console.error);
                     }
                 })
             } else {
-                console.log(`[log] ` + Date.now() + ` : ${message.author.username} file already exist`)
+                Logger.log(`${message.author.tag} file already exist.`, `info`)
                 message.author.send('Vous etes déjà inscrit')
                     .then(() =>
-                        console.log(`[log] ` + Date.now() + ` : ${message.author.username} is now registered`))
-                        message.delete()
+                        Logger.log(`${message.author.tag} is now registered.`, `info`),
+                        message.delete())
                     .catch(console.error);
             }
         })

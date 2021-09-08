@@ -1,12 +1,9 @@
-const config = require('../config');
+const message = require('../services/message')
 
 module.exports = {
     name: 'ping',
     description: 'Run a ping command.',
-    execute(message) {
-      message.channel
-        .send('Pong.')
-        .then(() => console.log(`[log] ` + Date.now() + ` : Replied to message ${message.id} from ${message.author.username}`))
-        .catch(console.error);;
+    execute(_message) {
+      message.send(_message, 'Pong!')
     }
 };

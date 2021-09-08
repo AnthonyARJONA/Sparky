@@ -2,6 +2,7 @@ const fs = require('fs');
 const discord = require('discord.js');
 const config = require('./config');
 const client = new discord.Client({ intents: config.discord_intents});
+const Logger = require('./services/logger');
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 client.commands = new discord.Collection();
@@ -12,8 +13,17 @@ for (const file of commandFiles) {
 }
   
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-    console.log(`I'm ready, I'm waiting for commands....`)
+
+  let status_list = ['type !help for help', 'created by Mimso', "hello I'm Sparky"]
+  let status = status_list[Math.floor(Math.random() * status_list.length)]
+
+  setInterval(() => {
+      client.user.setActivity(status, { type: 'WATCHING' })
+  }, 60000)
+
+  Logger.log(`Logged in as ${client.user.tag}!`)
+  Logger.log(`I'm ready, I'm waiting for commands....`)
+
 });
 
 client.on('messageCreate', async message => {
@@ -31,5 +41,16 @@ client.on('messageCreate', async message => {
       message.reply("Une erreur s'est produite pendaént l'exécution de la commande !");
     }
 })
+
+/*client.user.setActivity('type !help for help', { type: 'WATCHING' }) // STREAMING, WATCHING, CUSTOM_STATUS, PLAYING, COMPETING
+.then(presence => Logger.log(`Activity set to ${presence.activities[0].name}`))
+  .catch(console.error);
+*/
+
+//client.on('guildMemberAdd', (member) => {
+//  if(config.welcome_message === false) return;
+//  let channel = discord.BaseGuildTextChannel()
+//  channel.send
+//})
   
 client.login(config.discord_token)
