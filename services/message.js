@@ -15,11 +15,11 @@ module.exports = class message {
     }
 
     static reply(message, content, type = 'default') {
-        if(type === 'default') return message.channel.send(content)
+        if(type === 'default') return message.reply(content)
             .then(() => Logger.log("Replied to message " + message.id + " from " + message.author.username))
             .catch(console.error);;
 
-        if(type === 'code') return message.channel.send(`\`\`\`${content}\`\`\``)
+        if(type === 'code') return message.reply(`\`\`\`${content}\`\`\``)
             .then(() => Logger.log("Replied to message " + message.id + " from " + message.author.username))
             .catch(console.error);;
         return; 

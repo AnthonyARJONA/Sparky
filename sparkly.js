@@ -1,8 +1,9 @@
 const fs = require('fs');
 const discord = require('discord.js');
 const config = require('./config');
-const client = new discord.Client({ intents: config.discord_intents});
 const Logger = require('./services/logger');
+
+const client = new discord.Client({ intents: config.discord_intents});
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 client.commands = new discord.Collection();
