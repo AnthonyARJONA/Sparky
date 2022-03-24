@@ -2,7 +2,7 @@ module.exports = {
     "log": true,
     'welcome_message': true,
     "prefix": "!",
-    "discord_token": "ODg0MzU5OTUxNjYzOTA2ODQ2.YTXWYw.SR2MHB-wdR5ZVGv_iwTKh2mmP2M",
+    "discord_token": "",
     "discord_intents": [
         "DIRECT_MESSAGE_REACTIONS",
         "DIRECT_MESSAGE_TYPING",
